@@ -1,30 +1,12 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import './App.css'
 import logo from './logo.svg'
+import { flightService } from './services/flight.service'
 
 function App() {
 	const [flights, setFlights] = useState()
-	useEffect(() => {
-		const apiURL = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
-		axios
-			.get(apiURL, {
-				headers: {
-					Authorization: 'Bearer ifT740ASihjKkkj1YYTkbMKpKWAv',
-				},
-				params: {
-					originLocationCode: 'SYD',
-					destinationLocationCode: 'BKK',
-					departureDate: '2024-05-05',
-					adults: 1,
-					nonStop: false,
-					max: 5,
-				},
-			})
-			.then(resp => {
-				console.log(resp.data.data)
-			})
-	}, [])
+	const data = flightService.getFlight()
+	useEffect(() => {}, [])
 
 	return (
 		<div className='App'>
