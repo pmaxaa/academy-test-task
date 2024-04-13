@@ -16,17 +16,16 @@ class FlightService {
 			params: {
 				originLocationCode: formData.origin,
 				destinationLocationCode: formData.depart,
-				departureDate: '2024-05-05',
+				departureDate: formData.date,
 				adults: 1,
-				nonStop: false,
-				max: 50,
+				max: 250,
 				currencyCode: 'RUB',
 			},
 		})
 		const flights = data.data.map((item: IFlightRaw) => {
 			return {
 				id: item.id,
-				itineraries: item.itineraries[0],
+				itineraries: item.itineraries,
 				price: item.price,
 			}
 		})

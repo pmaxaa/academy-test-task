@@ -1,15 +1,15 @@
 import { FormEvent, useState } from 'react'
 import { flightService } from '../services/flight.service'
 import useFlightStore from './store/flightStore'
-export default function Form() {
-	//const [flights, setFlights] = useState([{}])
 
+export default function Form() {
 	const [formData, setFormData] = useState({
 		origin: '',
 		depart: '',
+		date: '',
 	})
 
-	const { flights, setFlights } = useFlightStore()
+	const { setFlights } = useFlightStore()
 
 	const handleChange = (event: FormEvent<HTMLInputElement>) => {
 		setFormData({
@@ -58,8 +58,10 @@ export default function Form() {
 					<div>
 						<input
 							type='date'
-							id='departure-date'
-							name='departure-date'
+							id='date'
+							name='date'
+							value={formData.date}
+							onChange={handleChange}
 							required
 						/>
 					</div>

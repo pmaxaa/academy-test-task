@@ -13,6 +13,7 @@ export interface IToken {
 export interface IFormData {
 	origin: string | null
 	depart: string | null
+	date: string | null
 	//adults: number
 }
 
