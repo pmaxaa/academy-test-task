@@ -9,3 +9,106 @@ export interface IToken {
 	type: string
 	username: string
 }
+
+export interface IFormData {
+	origin: string | null
+	depart: string | null
+	//adults: number
+}
+
+export type Flight = Pick<IFlightRaw, 'id' | 'itineraries' | 'price'>
+
+export interface IFlightRaw {
+	type: string
+	id: string
+	source: string
+	instantTicketingRequired: boolean
+	nonHomogeneous: boolean
+	oneWay: boolean
+	lastTicketingDate: string
+	lastTicketingDateTime: string
+	numberOfBookableSeats: number
+	itineraries: [
+		{
+			duration: string
+			segments: [
+				{
+					departure: {
+						iataCode: string
+						terminal: string
+						at: string
+					}
+					arrival: {
+						iataCode: string
+						at: string
+					}
+					carrierCode: string
+					number: string
+					aircraft: {
+						code: string
+					}
+					operating: {
+						carrierCode: string
+					}
+					duration: string
+					id: string
+					numberOfStops: number
+					blacklistedInEU: false
+				}
+			]
+		}
+	]
+	price: {
+		currency: string
+		total: string
+		base: string
+		fees: [
+			{
+				amount: string
+				type: string
+			}
+		]
+		grandTotal: string
+	}
+	pricingOptions: {
+		fareType: Array<String>
+		includedCheckedBagsOnly: boolean
+	}
+	validatingAirlineCodes: Array<String>
+	travelerPricings: [
+		{
+			travelerId: string
+			fareOption: string
+			travelerType: string
+			price: {
+				currency: string
+				total: string
+				base: string
+			}
+			fareDetailsBySegment: [
+				{
+					segmentId: string
+					cabin: string
+					fareBasis: string
+					brandedFare: string
+					brandedFareLabel: string
+					class: string
+					includedCheckedBags: {
+						weight: string
+						weightUnit: string
+					}
+					amenities: [
+						{
+							description: string
+							isChargeable: boolean
+							amenityType: string
+							amenityProvider: {
+								name: string
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

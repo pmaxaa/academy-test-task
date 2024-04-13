@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IToken } from '../types/types'
+import { IFlightRaw, IFormData, IToken } from '../types/types'
 
 class FlightService {
 	private API_KEY = 'EK1pALIQ9dFZjIbs1cLh8IWAeBXBurTr'
@@ -7,23 +7,30 @@ class FlightService {
 	private TOKEN_URL = 'https://test.api.amadeus.com/v1/security/oauth2/token'
 	private API_URL = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
 
-	async getFlight() {
+	async getFlight(formData: IFormData) {
 		const token = await this.getToken()
 		const { data } = await axios.get(this.API_URL, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
 			params: {
-				originLocationCode: 'SYD',
-				destinationLocationCode: 'BKK',
+				originLocationCode: formData.origin,
+				destinationLocationCode: formData.depart,
 				departureDate: '2024-05-05',
 				adults: 1,
 				nonStop: false,
-				max: 5,
+				max: 50,
+				currencyCode: 'RUB',
 			},
 		})
-		console.log(data)
-		return data
+		const flights = data.data.map((item: IFlightRaw) => {
+			return {
+				id: item.id,
+				itineraries: item.itineraries[0],
+				price: item.price,
+			}
+		})
+		return flights
 	}
 
 	async getToken() {
