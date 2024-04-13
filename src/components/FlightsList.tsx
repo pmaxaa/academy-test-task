@@ -1,7 +1,10 @@
-import useFlightStore from './store/flightStore'
+import { useNavigate } from 'react-router-dom'
+import useFlightStore from './store/store'
 
 export default function FlightsList() {
 	const { flights, sortByCost, sortByTime } = useFlightStore()
+
+	const navigate = useNavigate()
 
 	return (
 		<>
@@ -9,7 +12,7 @@ export default function FlightsList() {
 			<button onClick={sortByCost}>Самый дешевый</button>
 			<button onClick={sortByTime}>Самый быстрый</button>
 			{flights.map(flight => (
-				<div key={flight.id}>
+				<div key={flight.id} onClick={() => navigate(`/flight/${flight.id}`)}>
 					<div>{flight.id}</div>
 					<div>Стоимость: {flight.price.grandTotal}</div>
 					<div>Время в пути: {flight.itineraries[0].duration}</div>

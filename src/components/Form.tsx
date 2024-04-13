@@ -1,28 +1,26 @@
-import { FormEvent, useState } from 'react'
-import { flightService } from '../services/flight.service'
-import useFlightStore from './store/flightStore'
+import { FormEvent } from 'react'
+import useFlightStore from './store/store'
 
 export default function Form() {
-	const [formData, setFormData] = useState({
+	/*const [formData, setFormData] = useState({
 		origin: '',
 		depart: '',
 		date: '',
-	})
+	})*/
 
-	const { setFlights } = useFlightStore()
+	const { formData, setFormData, setFlights } = useFlightStore()
 
 	const handleChange = (event: FormEvent<HTMLInputElement>) => {
-		setFormData({
+		/*setFormData({
 			...formData,
 			[event.currentTarget.id]: event.currentTarget.value,
-		})
+		})*/
+		setFormData(event.currentTarget.id, event.currentTarget.value)
 	}
 
 	async function searchFlight(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
-		//TODO: Перенести в store
-		const flights = await flightService.getFlight(formData)
-		setFlights(flights)
+		setFlights(formData)
 	}
 
 	return (

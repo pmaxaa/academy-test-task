@@ -1,12 +1,15 @@
 import { create } from 'zustand'
-import { Flight } from '../../types/types'
+import { flightService } from '../../services/flight.service'
+import { Flight, IFormData } from '../../types/types'
 
 type State = {
 	flights: Array<Flight>
+	formData: IFormData
 }
 
 type Action = {
-	setFlights: (flights: State['flights']) => void
+	setFlights: (formData: State['formData']) => void
+	setFormData: (id: string, value: string) => void
 	sortByCost: () => void
 	sortByTime: () => void
 }
@@ -20,13 +23,27 @@ const getTime = (str: string) => {
 
 const useFlightStore = create<State & Action>(set => ({
 	flights: [],
-	setFlights: flights => set({ flights: flights }),
+	formData: {
+		origin: '',
+		depart: '',
+		date: '',
+	},
+
+	setFlights: async formData => {
+		const flights = await flightService.getFlight(formData)
+		set({ flights: flights })
+	},
+
+	setFormData: (id, value) =>
+		set(state => ({ formData: { ...state.formData, [id]: value } })),
+
 	sortByCost: () =>
 		set(state => ({
 			flights: state.flights.sort((a, b) =>
 				parseInt(a.price.total) >= parseInt(b.price.total) ? 1 : -1
 			),
 		})),
+
 	sortByTime: () =>
 		set(state => ({
 			flights: state.flights.sort((a, b) =>
