@@ -5,11 +5,13 @@ import { Flight, IFormData } from '../../types/types'
 type State = {
 	flights: Array<Flight>
 	formData: IFormData
+	filters: Array<String>
 }
 
 type Action = {
 	setFlights: (formData: State['formData']) => void
 	setFormData: (id: string, value: string) => void
+	setFilters: (value: string) => void
 	sortByCost: () => void
 	sortByTime: () => void
 }
@@ -28,6 +30,7 @@ const useFlightStore = create<State & Action>(set => ({
 		depart: '',
 		date: '',
 	},
+	filters: ['all'],
 
 	setFlights: async formData => {
 		const flights = await flightService.getFlight(formData)
@@ -36,6 +39,15 @@ const useFlightStore = create<State & Action>(set => ({
 
 	setFormData: (id, value) =>
 		set(state => ({ formData: { ...state.formData, [id]: value } })),
+
+	setFilters: value =>
+		set(state => {
+			if (state.filters.includes(value)) {
+				return { filters: state.filters.filter(option => option !== value) }
+			} else {
+				return { filters: [...state.filters, value] }
+			}
+		}),
 
 	sortByCost: () =>
 		set(state => ({
