@@ -1,7 +1,18 @@
 .container {
-	width: 70%;
+	width: 75%;
 	background-color: rgb(227, 232, 236);
-	padding: 10px;
+	padding: 30px;
+	opacity: 0;
+	animation: ani 2.5s forwards;
+}
+
+@keyframes ani {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 .buttons {

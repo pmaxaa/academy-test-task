@@ -28,3 +28,8 @@ code {
 *::after {
 	box-sizing: border-box;
 }
+
+.flights {
+	display: flex;
+	flex-direction: row;
+}
