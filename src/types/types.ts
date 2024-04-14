@@ -19,15 +19,7 @@ export interface IFormData {
 export type Flight = Pick<IFlightRaw, 'id' | 'itineraries' | 'price'>
 
 export interface IFlightRaw {
-	type: string
 	id: string
-	source: string
-	instantTicketingRequired: boolean
-	nonHomogeneous: boolean
-	oneWay: boolean
-	lastTicketingDate: string
-	lastTicketingDateTime: string
-	numberOfBookableSeats: number
 	itineraries: [
 		{
 			duration: string
@@ -35,7 +27,6 @@ export interface IFlightRaw {
 				{
 					departure: {
 						iataCode: string
-						terminal: string
 						at: string
 					}
 					arrival: {
@@ -43,17 +34,10 @@ export interface IFlightRaw {
 						at: string
 					}
 					carrierCode: string
-					number: string
 					aircraft: {
 						code: string
 					}
-					operating: {
-						carrierCode: string
-					}
 					duration: string
-					id: string
-					numberOfStops: number
-					blacklistedInEU: false
 				}
 			]
 		}
