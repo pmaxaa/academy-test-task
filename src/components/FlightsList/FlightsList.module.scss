@@ -9,7 +9,7 @@
 	margin: 0 auto;
 
 	button {
-		border: 1px solid black;
+		border: 1px solid rgb(48, 12, 139);
 		width: 200px;
 		height: 50px;
 		background-color: inherit;
@@ -20,6 +20,10 @@
 
 		&:last-child {
 			border-radius: 0 10px 10px 0;
+		}
+
+		&:hover {
+			cursor: pointer;
 		}
 
 		&.active {

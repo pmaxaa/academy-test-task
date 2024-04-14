@@ -1,8 +1,9 @@
 import { FormEvent, useEffect, useState } from 'react'
-import { flightService } from '../services/flight.service'
-import useFlightStore from '../store/store'
-import { ICity } from '../types/types'
-import Dropdown from './Dropdown'
+import { flightService } from '../../services/flight.service'
+import useFlightStore from '../../store/store'
+import { ICity } from '../../types/types'
+import Dropdown from '../Dropdown/Dropdown'
+import styles from './FlightsForm.module.scss'
 
 export default function FlightsForm() {
 	const { formData, setFormData, setFlights } = useFlightStore()
@@ -61,11 +62,10 @@ export default function FlightsForm() {
 	}
 
 	return (
-		<>
-			<div>Form</div>
+		<div className={styles.container}>
 			<form onSubmit={searchFlight}>
-				<div>
-					<div>
+				<div className={styles.form}>
+					<div className={styles['dropdown-input']}>
 						<input
 							type='text'
 							placeholder='City or Airport'
@@ -74,13 +74,16 @@ export default function FlightsForm() {
 							value={formData.origin}
 							onChange={handleChange}
 							onClick={handleInputClick}
+							autoComplete='off'
 							required
 						/>
-						{showDropdown.origin && options && options?.length > 0 && (
-							<Dropdown id='origin' options={options} />
-						)}
+						<div>
+							{showDropdown.origin && options && options?.length > 0 && (
+								<Dropdown id='origin' options={options} />
+							)}
+						</div>
 					</div>
-					<div>
+					<div className={styles['dropdown-input']}>
 						<input
 							type='text'
 							placeholder='City or Airport'
@@ -89,16 +92,17 @@ export default function FlightsForm() {
 							value={formData.depart}
 							onChange={handleChange}
 							onClick={handleInputClick}
+							autoComplete='off'
 							required
 						/>
-						{showDropdown.depart && options && options?.length > 0 && (
-							<Dropdown id='depart' options={options} />
-						)}
+						<div>
+							{showDropdown.depart && options && options?.length > 0 && (
+								<Dropdown id='depart' options={options} />
+							)}
+						</div>
 					</div>
-				</div>
 
-				<div>
-					<div>
+					<div className={styles['date-input']}>
 						<input
 							type='date'
 							id='date'
@@ -108,9 +112,9 @@ export default function FlightsForm() {
 							required
 						/>
 					</div>
+					<button type='submit'>Search</button>
 				</div>
-				<button type='submit'>Search</button>
 			</form>
-		</>
+		</div>
 	)
 }

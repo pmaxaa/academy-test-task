@@ -22,20 +22,24 @@ class FlightService {
 
 	async getFlight(formData: IFormData) {
 		const token = await this.getToken()
-		const response = await axios.get<flightResponse>(this.API_URL, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-			params: {
-				originLocationCode: formData.origin,
-				destinationLocationCode: formData.depart,
-				departureDate: formData.date,
-				adults: 1,
-				max: 250,
-				currencyCode: 'RUB',
-			},
-		})
-		if (response.statusText === 'OK') {
+		const response = await axios
+			.get<flightResponse>(this.API_URL, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+				params: {
+					originLocationCode: formData.origin,
+					destinationLocationCode: formData.depart,
+					departureDate: formData.date,
+					adults: 1,
+					max: 250,
+					currencyCode: 'RUB',
+				},
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
+		if (response && response.statusText === 'OK') {
 			const { data } = response
 			const flights = data.data.map((item: IFlightRaw) => {
 				const { id, itineraries, price } = item

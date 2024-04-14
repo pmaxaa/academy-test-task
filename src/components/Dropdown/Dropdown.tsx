@@ -1,5 +1,6 @@
-import useFlightStore from '../store/store'
-import { ICity } from '../types/types'
+import useFlightStore from '../../store/store'
+import { ICity } from '../../types/types'
+import styles from './Dropdown.module.scss'
 
 export default function Dropdown({
 	id,
@@ -15,14 +16,14 @@ export default function Dropdown({
 	}
 
 	return (
-		<div className='dropdown-container'>
+		<div className={styles.container}>
 			{options.map((option: ICity) => (
 				<div
 					onClick={() => onItemClick(option)}
 					key={option.id}
-					className='dropdown-item'
+					className={styles.item}
 				>
-					{option.name}({option.iataCode})
+					{option.name} {''}({option.iataCode})
 				</div>
 			))}
 		</div>

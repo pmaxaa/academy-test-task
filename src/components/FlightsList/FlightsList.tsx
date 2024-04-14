@@ -70,7 +70,7 @@ export default function FlightsList() {
 								/>
 							</div>
 							<div className={styles.details}>
-								<div className='datetime'>
+								<div>
 									<div className={styles.title}>
 										{firstSegment.departure.iataCode} -{' '}
 										{lastSegment.arrival.iataCode}
@@ -80,7 +80,7 @@ export default function FlightsList() {
 										{formatData.time(lastSegment.arrival.at)}
 									</div>
 								</div>
-								<div className='tiime'>
+								<div>
 									<div className={styles.title}>В пути</div>
 									<div className={styles.data}>
 										<time dateTime={duration}>
@@ -89,7 +89,7 @@ export default function FlightsList() {
 										</time>
 									</div>
 								</div>
-								<div className='stops'>
+								<div>
 									<div className={styles.title}>
 										{
 											filtersData.find(item => {
