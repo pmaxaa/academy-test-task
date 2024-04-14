@@ -1,42 +1,52 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { flightService } from '../services/flight.service'
 import useFlightStore from '../store/store'
+import { ICity } from '../types/types'
 import Dropdown from './Dropdown'
 
 export default function FlightsForm() {
 	const { formData, setFormData, setFlights } = useFlightStore()
-	const [options, setOptions] = useState([
-		{
-			name: '',
-			id: '',
-			iataCode: '',
-		},
-	])
-	const [showMenu, setShowMenu] = useState({ origin: false, depart: false })
+	const [options, setOptions] = useState<ICity[] | null>()
+	const [showDropdown, setShowDropdown] = useState({
+		origin: false,
+		depart: false,
+	})
+	const [delayDebounce, setDelayDebounce] = useState<NodeJS.Timeout>()
+
+	const hideDropdown = () => {
+		setShowDropdown({ origin: false, depart: false })
+		window.removeEventListener('click', hideDropdown)
+	}
+
 	useEffect(() => {
-		const setFalse = () => setShowMenu({ origin: false, depart: false })
-		window.addEventListener('click', setFalse)
 		return () => {
-			window.removeEventListener('click', setFalse)
+			window.removeEventListener('click', hideDropdown)
 		}
 	}, [])
 
-	useEffect(() => {
-		setOptions([])
-	}, [showMenu])
-
 	const handleChange = (event: FormEvent<HTMLInputElement>) => {
+		clearTimeout(delayDebounce)
 		setFormData(event.currentTarget.id, event.currentTarget.value)
-		getOptions(event.currentTarget.value)
+		setDelayDebounce(
+			setTimeout(
+				(value: string) => {
+					getOptions(value)
+				},
+				1000,
+				event.currentTarget.value
+			)
+		)
 	}
 
 	const handleInputClick = (event: any) => {
-		setShowMenu({
-			...showMenu,
+		setOptions(null)
+		setShowDropdown({
+			...showDropdown,
 			depart: false,
 			origin: false,
 			[event.currentTarget.id]: true,
 		})
+		window.addEventListener('click', hideDropdown)
 		event.stopPropagation()
 	}
 
@@ -53,8 +63,6 @@ export default function FlightsForm() {
 	return (
 		<>
 			<div>Form</div>
-			<div></div>
-
 			<form onSubmit={searchFlight}>
 				<div>
 					<div>
@@ -68,7 +76,9 @@ export default function FlightsForm() {
 							onClick={handleInputClick}
 							required
 						/>
-						{showMenu.origin && <Dropdown id='origin' options={options} />}
+						{showDropdown.origin && options && options?.length > 0 && (
+							<Dropdown id='origin' options={options} />
+						)}
 					</div>
 					<div>
 						<input
@@ -81,7 +91,9 @@ export default function FlightsForm() {
 							onClick={handleInputClick}
 							required
 						/>
-						{showMenu.depart && <Dropdown id='depart' options={options} />}
+						{showDropdown.depart && options && options?.length > 0 && (
+							<Dropdown id='depart' options={options} />
+						)}
 					</div>
 				</div>
 
@@ -102,11 +114,3 @@ export default function FlightsForm() {
 		</>
 	)
 }
-
-// 	return (
-// 		<div>
-// 			<h1>Count: {count}</h1>
-// 			<button onClick={increment}>Increment</button>
-// 		</div>
-// 	)
-// }

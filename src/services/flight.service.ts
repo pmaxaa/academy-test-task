@@ -1,6 +1,17 @@
 import axios from 'axios'
 import { ICity, IFlightRaw, IFormData, IToken } from '../types/types'
 
+type flightResponse = {
+	data: IFlightRaw[] | []
+	dictionaries?: {
+		carriers: Record<string, string>
+	}
+}
+
+type cityResponse = {
+	data: ICity[]
+}
+
 class FlightService {
 	private API_KEY = 'EK1pALIQ9dFZjIbs1cLh8IWAeBXBurTr'
 	private API_SECRET = '9lH1AeuOIB2HEibV'
@@ -11,7 +22,7 @@ class FlightService {
 
 	async getFlight(formData: IFormData) {
 		const token = await this.getToken()
-		const { data } = await axios.get(this.API_URL, {
+		const response = await axios.get<flightResponse>(this.API_URL, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -24,21 +35,25 @@ class FlightService {
 				currencyCode: 'RUB',
 			},
 		})
-		const flights = data.data.map((item: IFlightRaw) => {
-			return {
-				id: item.id,
-				itineraries: item.itineraries,
-				price: item.price,
-			}
-		})
-		const carriers = data.dictionaries.carriers
-		return [flights, carriers]
+		if (response.statusText === 'OK') {
+			const { data } = response
+			const flights = data.data.map((item: IFlightRaw) => {
+				const { id, itineraries, price } = item
+				return {
+					id,
+					itineraries,
+					price,
+				}
+			})
+			const carriers = data.dictionaries?.carriers
+			return { flights, carriers }
+		}
 	}
 
 	async getCities(str: string) {
 		const token = await this.getToken()
 		const response = await axios
-			.get(this.CITIES_URL, {
+			.get<cityResponse>(this.CITIES_URL, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
@@ -51,7 +66,7 @@ class FlightService {
 				console.log(error)
 			})
 
-		if (response) {
+		if (response && response.statusText === 'OK') {
 			const cities = response.data.data.map((item: ICity) => {
 				return {
 					id: item.id,

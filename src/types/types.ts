@@ -11,9 +11,9 @@ export interface IToken {
 }
 
 export interface IFormData {
-	origin: string | number | readonly string[] | undefined
-	depart: string | number | readonly string[] | undefined
-	date: string | number | readonly string[] | undefined
+	origin: string
+	depart: string
+	date: string
 }
 
 export type Flight = Pick<IFlightRaw, 'id' | 'itineraries' | 'price'>

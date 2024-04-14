@@ -16,17 +16,15 @@ export default function Dropdown({
 
 	return (
 		<div className='dropdown-container'>
-			<div className='dropdown-menu'>
-				{options.map((option: ICity) => (
-					<div
-						onClick={() => onItemClick(option)}
-						key={option.id}
-						className='dropdown-item'
-					>
-						{option.name}({option.iataCode})
-					</div>
-				))}
-			</div>
+			{options.map((option: ICity) => (
+				<div
+					onClick={() => onItemClick(option)}
+					key={option.id}
+					className='dropdown-item'
+				>
+					{option.name}({option.iataCode})
+				</div>
+			))}
 		</div>
 	)
 }

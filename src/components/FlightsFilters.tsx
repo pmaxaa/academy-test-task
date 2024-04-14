@@ -1,29 +1,7 @@
+import { filtersData } from '../constants'
 import useFlightStore from '../store/store'
 
 export default function FlightsFilters() {
-	const filtersData = [
-		{
-			id: 'all',
-			title: 'Все',
-		},
-		{
-			id: '0',
-			title: 'Без пересадок',
-		},
-		{
-			id: '1',
-			title: '1 пересадка',
-		},
-		{
-			id: '2',
-			title: '2 пересадки',
-		},
-		{
-			id: '3',
-			title: '3 пересадки',
-		},
-	]
-
 	const { filters, setFilters } = useFlightStore()
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

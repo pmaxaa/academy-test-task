@@ -34,7 +34,7 @@ const useFlightStore = create<State & Action>(set => ({
 
 	setFlights: async formData => {
 		const data = await flightService.getFlight(formData)
-		set({ flights: data[0] })
+		if (data) set({ flights: data.flights })
 	},
 
 	setFormData: (id, value) =>
