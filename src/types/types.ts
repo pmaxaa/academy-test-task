@@ -112,3 +112,9 @@ export interface IFlightRaw {
 		}
 	]
 }
+
+export interface ICity {
+	name: string
+	id: string
+	iataCode: string
+}

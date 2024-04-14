@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import useFlightStore from './store/store'
+import useFlightStore from '../store/store'
 
 export default function FlightsList() {
 	const { flights, filters, sortByCost, sortByTime } = useFlightStore()
@@ -14,6 +14,13 @@ export default function FlightsList() {
 		}
 	})
 
+	const minutes = (str: string) => {
+		return Number(str.match(/(?<=H)\d+/))
+	}
+	const hours = (str: string) => {
+		return Number(str.match(/(?<=PT)\d+/))
+	}
+
 	const navigate = useNavigate()
 
 	return (
@@ -24,8 +31,21 @@ export default function FlightsList() {
 			{filteredFlights.map(flight => (
 				<div key={flight.id} onClick={() => navigate(`/flight/${flight.id}`)}>
 					<div>{flight.id}</div>
-					<div>Стоимость: {flight.price.grandTotal}</div>
-					<div>Время в пути: {flight.itineraries[0].duration}</div>
+					<img
+						src={`https://content.airhex.com/content/logos/airlines_${flight.itineraries[0].segments[0].carrierCode}_100_30_r.png`}
+					/>
+					<div>
+						Стоимость:{' '}
+						{new Intl.NumberFormat('ru-RU', {
+							style: 'currency',
+							currency: 'RUB',
+							maximumFractionDigits: 0,
+						}).format(parseInt(flight.price.total))}
+					</div>
+					<div>
+						Время в пути: {hours(flight.itineraries[0].duration)}ч{' '}
+						{minutes(flight.itineraries[0].duration)}мин
+					</div>
 					<div>
 						Количество пересадок: {flight.itineraries[0].segments.length - 1}
 					</div>

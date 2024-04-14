@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { flightService } from '../../services/flight.service'
-import { Flight, IFormData } from '../../types/types'
+import { flightService } from '../services/flight.service'
+import { Flight, IFormData } from '../types/types'
 
 type State = {
 	flights: Array<Flight>
@@ -18,7 +18,7 @@ type Action = {
 
 const getTime = (str: string) => {
 	const hours = Number(str.match(/(?<=PT)\d+/))
-	const minutes = Number(str.match(/(?<=M)\d+/))
+	const minutes = Number(str.match(/(?<=H)\d+/))
 	const time = hours * 60 + minutes
 	return time
 }
@@ -33,8 +33,8 @@ const useFlightStore = create<State & Action>(set => ({
 	filters: ['all'],
 
 	setFlights: async formData => {
-		const flights = await flightService.getFlight(formData)
-		set({ flights: flights })
+		const data = await flightService.getFlight(formData)
+		set({ flights: data[0] })
 	},
 
 	setFormData: (id, value) =>

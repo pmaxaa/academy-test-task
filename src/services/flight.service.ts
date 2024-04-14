@@ -1,11 +1,13 @@
 import axios from 'axios'
-import { IFlightRaw, IFormData, IToken } from '../types/types'
+import { ICity, IFlightRaw, IFormData, IToken } from '../types/types'
 
 class FlightService {
 	private API_KEY = 'EK1pALIQ9dFZjIbs1cLh8IWAeBXBurTr'
 	private API_SECRET = '9lH1AeuOIB2HEibV'
 	private TOKEN_URL = 'https://test.api.amadeus.com/v1/security/oauth2/token'
 	private API_URL = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
+	private CITIES_URL =
+		'https://test.api.amadeus.com/v1/reference-data/locations'
 
 	async getFlight(formData: IFormData) {
 		const token = await this.getToken()
@@ -29,7 +31,36 @@ class FlightService {
 				price: item.price,
 			}
 		})
-		return flights
+		const carriers = data.dictionaries.carriers
+		return [flights, carriers]
+	}
+
+	async getCities(str: string) {
+		const token = await this.getToken()
+		const response = await axios
+			.get(this.CITIES_URL, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+				params: {
+					subType: 'CITY',
+					keyword: str,
+				},
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
+
+		if (response) {
+			const cities = response.data.data.map((item: ICity) => {
+				return {
+					id: item.id,
+					name: item.name,
+					iataCode: item.iataCode,
+				}
+			})
+			return cities
+		}
 	}
 
 	async getToken() {

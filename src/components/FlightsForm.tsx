@@ -1,21 +1,48 @@
-import { FormEvent } from 'react'
-import useFlightStore from './store/store'
+import { FormEvent, useEffect, useState } from 'react'
+import { flightService } from '../services/flight.service'
+import useFlightStore from '../store/store'
+import Dropdown from './Dropdown'
 
-export default function Form() {
-	/*const [formData, setFormData] = useState({
-		origin: '',
-		depart: '',
-		date: '',
-	})*/
-
+export default function FlightsForm() {
 	const { formData, setFormData, setFlights } = useFlightStore()
+	const [options, setOptions] = useState([
+		{
+			name: '',
+			id: '',
+			iataCode: '',
+		},
+	])
+	const [showMenu, setShowMenu] = useState({ origin: false, depart: false })
+	useEffect(() => {
+		const setFalse = () => setShowMenu({ origin: false, depart: false })
+		window.addEventListener('click', setFalse)
+		return () => {
+			window.removeEventListener('click', setFalse)
+		}
+	}, [])
+
+	useEffect(() => {
+		setOptions([])
+	}, [showMenu])
 
 	const handleChange = (event: FormEvent<HTMLInputElement>) => {
-		/*setFormData({
-			...formData,
-			[event.currentTarget.id]: event.currentTarget.value,
-		})*/
 		setFormData(event.currentTarget.id, event.currentTarget.value)
+		getOptions(event.currentTarget.value)
+	}
+
+	const handleInputClick = (event: any) => {
+		setShowMenu({
+			...showMenu,
+			depart: false,
+			origin: false,
+			[event.currentTarget.id]: true,
+		})
+		event.stopPropagation()
+	}
+
+	async function getOptions(str: string) {
+		const options = await flightService.getCities(str)
+		setOptions(options)
 	}
 
 	async function searchFlight(event: FormEvent<HTMLFormElement>) {
@@ -26,6 +53,8 @@ export default function Form() {
 	return (
 		<>
 			<div>Form</div>
+			<div></div>
+
 			<form onSubmit={searchFlight}>
 				<div>
 					<div>
@@ -36,8 +65,10 @@ export default function Form() {
 							name='origin'
 							value={formData.origin}
 							onChange={handleChange}
+							onClick={handleInputClick}
 							required
 						/>
+						{showMenu.origin && <Dropdown id='origin' options={options} />}
 					</div>
 					<div>
 						<input
@@ -47,8 +78,10 @@ export default function Form() {
 							name='depart'
 							value={formData.depart}
 							onChange={handleChange}
+							onClick={handleInputClick}
 							required
 						/>
+						{showMenu.depart && <Dropdown id='depart' options={options} />}
 					</div>
 				</div>
 

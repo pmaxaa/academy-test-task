@@ -1,11 +1,11 @@
 import FlightsFilters from './FlightsFilters'
+import FlightsForm from './FlightsForm'
 import FlightsList from './FlightsList'
-import Form from './Form'
 
 export default function FlightsSearch() {
 	return (
 		<div>
-			<Form />
+			<FlightsForm />
 			<FlightsFilters />
 			<br />
 			<FlightsList />

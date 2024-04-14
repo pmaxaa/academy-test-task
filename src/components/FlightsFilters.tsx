@@ -1,4 +1,4 @@
-import useFlightStore from './store/store'
+import useFlightStore from '../store/store'
 
 export default function FlightsFilters() {
 	const filtersData = [
