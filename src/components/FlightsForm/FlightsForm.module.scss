@@ -7,11 +7,13 @@
 	justify-content: center;
 	background-image: url('../../../public/img/plain2.png');
 	background-repeat: no-repeat;
+	overflow: hidden;
 }
 
 .form {
 	display: flex;
 	flex-direction: row;
+	min-width: fit-content;
 
 	.dropdown-input {
 		display: flex;
@@ -25,6 +27,7 @@
 
 	input {
 		width: 20vw;
+		max-width: 400px;
 		height: 5vh;
 		border: 1px solid rgb(227, 232, 236);
 		border-radius: 5px;
@@ -47,6 +50,22 @@
 		&:hover {
 			background-color: rgba(255, 180, 41, 1);
 			cursor: pointer;
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.form {
+		flex-direction: column;
+		align-items: center;
+		input {
+			width: 50vw;
+			min-width: 200px;
+		}
+		button {
+			padding: 5px;
+			margin-left: 0;
+			margin-top: 5px;
 		}
 	}
 }

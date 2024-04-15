@@ -17,7 +17,6 @@
 
 .buttons {
 	text-align: center;
-	margin: 0 auto;
 
 	button {
 		border: 1px solid rgb(48, 12, 139);
@@ -52,6 +51,8 @@
 		flex-direction: column;
 		background-color: azure;
 		padding: 30px 40px;
+		overflow: hidden;
+		min-width: 300px;
 
 		&:not(:first-child) {
 			margin-top: 15px;
@@ -59,6 +60,8 @@
 
 		&:hover {
 			cursor: pointer;
+			background-color: rgb(232, 232, 246);
+			transform: translateY(-7px);
 		}
 
 		.main-info {
@@ -73,7 +76,8 @@
 			}
 
 			img {
-				width: 280px;
+				max-width: 100%;
+				height: auto;
 			}
 		}
 
@@ -92,6 +96,24 @@
 				font-weight: 500;
 				margin-bottom: 8px;
 			}
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.container {
+		width: 100%;
+		padding: 10px;
+	}
+	.buttons {
+		button {
+			width: 130px;
+			height: 40px;
+		}
+	}
+	.list {
+		li {
+			padding: 10px 20px;
 		}
 	}
 }
